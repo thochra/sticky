@@ -1,3 +1,8 @@
+// /!\
+//  This file has been customized for personnal needs: https://github.com/thochra/sticky
+//  Follow website bellow to find official repository
+// /!\
+
 // Sticky Plugin v1.0.2 for jQuery
 // =============
 // Author: Anthony Garand
