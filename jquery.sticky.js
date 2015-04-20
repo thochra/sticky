@@ -82,7 +82,22 @@
               .css('top', newTop);
 
             s.stickyElement.parent().addClass(s.className);
-            s.stickyElement.trigger('sticky-start', [s]);
+
+            if (s.currentTop === null) {
+              s.stickyElement.trigger('sticky-start', [s]);
+            } else {
+              // sticky is started but it have to be repositioned
+              s.stickyElement.trigger('sticky-update', [s]);
+            }
+
+            if (s.currentTop === s.topSpacing && s.currentTop > newTop || s.currentTop === null && newTop < s.topSpacing) {
+              // just reached bottom || just started to stick but bottom is already reached
+              s.stickyElement.trigger('sticky-bottom-reached', [s]);
+            } else if(s.currentTop !== null && newTop === s.topSpacing && s.currentTop < newTop) {
+              // sticky is started && sticked at topSpacing && overflowing from top just finished
+              s.stickyElement.trigger('sticky-bottom-unreached', [s]);
+            }
+
             s.currentTop = newTop;
           }
           if (s.followHorizontalScroll && newLeft !== s.currentLeft && s.stickyElement.css('position') === 'fixed') {
@@ -163,7 +178,6 @@
           }
           if(removeIdx != -1)
           {
-            sticked.splice(removeIdx,1);
             unstickyElement.unwrap();
             unstickyElement
               .css({
