@@ -2,15 +2,27 @@
 <html>
 <head>
 	<title>Sticky Plugin</title>
-	<script src="http://use.typekit.com/ypv4axq.js"></script>
-	<script>try{Typekit.load();}catch(e){}</script>
+	<link href='http://fonts.googleapis.com/css?family=Droid+Sans+Mono' rel='stylesheet' type='text/css'>
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
-	<script src="/jquery.sticky.js"></script>
+	<script src="jquery.sticky.js"></script>
 	<script>
 		$(document).ready(function(){
-			$("#header").sticky({topSpacing:0});
+			$("#header").sticky({topSpacing:0, bottomSpacing: 4000});
 			$("#buttons").sticky({topSpacing:70});
 			$("#authorinfo").sticky({topSpacing:160});
+
+			var $log = $('#log');
+			var logEvent = function(event) {
+				$log.val($log.val() + $(event.target).attr('id') + ': ' + event.data + "\n");
+			};
+
+			// $('#header, #buttons, #authorinfo')
+			$('#header')
+				.bind('sticky-start', 'sticky-start', logEvent)
+				.bind('sticky-end', 'sticky-end', logEvent)
+				.bind('sticky-bottom-reached', 'sticky-bottom-reached', logEvent)
+				.bind('sticky-bottom-unreached', 'sticky-bottom-unreached', logEvent)
+			;
 		});
 	</script>
 	<style>
@@ -156,13 +168,26 @@
 			padding: 10px 20px;
 			line-height: 30px;
 			font-size: 14px;
-			font-family: "droid-sans-mono-1","droid-sans-mono-2", "courier new";
+			font-family: 'Droid Sans Mono', 'courier new';
 		}
 		.clear {clear:both;}
 		p#authorinfo {
 			width: 700px;
 			margin: 0 auto;
 			font-size: 12px;
+		}
+		.log {
+			position: fixed;
+			bottom: 0;
+			right: 2px;
+		}
+		.log .title {
+			display: block;
+			background-color: rgba(255, 255, 255, 0.5);
+		}
+		#log {
+			width: 360px;
+			height: 180px;
 		}
 	</style>
 	<script type="text/javascript">
@@ -217,6 +242,12 @@
 			Made with love by <a href="http://anthonygarand.com">Anthony Garand</a>
 		</p>
 	</div>
+
+	<div class="log">
+		<span class="title">Events logs</span>
+		<textarea id="log"></textarea>
+	</div>
+
 	<script type="text/javascript"
 	  src="http://gaug.es/track.js"
 	  id="gauges-tracker"
